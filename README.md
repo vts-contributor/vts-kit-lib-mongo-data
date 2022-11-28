@@ -103,7 +103,9 @@ The geoIntersects query finds objects that at least intersect with a given Geome
 ```java
 FindIterable<Document> geoIntersects(String entityClass, ArrayList<Position> positions)
 ```
-##Aggregation introduce
+
+## Aggregation introduce
+
 ### Introduction
 Aggregation framework is an advanced query of MongoDb that allows to perform calculations, processing and combining from multiple documents (similar to tables in SQL) to produce the necessary information.
 ### The principle of aggregation
@@ -142,21 +144,85 @@ The operators to be performed are described as shown below:
 <p align="center">
     <img src="/doc/images/FollowAggregationDetails.PNG"/>
 </p>
+
 The image above when performing the calculation on the products collection.
 
 1: First the `$match` operation will be executed. `$match` will select certain documents from input.
 
 2: After performing the `$match` operation, the values from the output of `$match` will be used as input for the `$group` operation. This operator is responsible for grouping the outputs according to specific conditions such as sum or average.
 
-3: Output of `$group` operation will be used as input for `$sort` operation. Operation `$Sort` is responsible for sorting the results (according to the given conditions) and returns the final result
+3: Output of `$group` operation will be used as input for `$sort` operation. Operation `$Sort` is responsible for sorting the results (according to the given conditions) and returns the final result.
 
-###Comparison table between SQL and aggregation framework:
+### Comparison table between SQL and aggregation framework:
 
 <p align="center">
     <img src="/doc/images/Aggregation.PNG"/>
 </p>
 
+#### Example
 
+Sample data `Etudiant.class`
+```json
+{
+  "firstName": "W",
+  "lastName": "Nguyen Van",
+  "age": 25,
+  "location": "DN",
+  "salary": 22.2
+}
+```
+Use group in handling query returned data.
+```sql
+db.etudiant.aggregate ([ { "$match" : { "location" : "DN"}} , { "$group" : { "_id" : "$lastName" , "lastName" : { "$first" : "$lastName"}}}])
+```
+```java
+public void getAllLastNameInLocation() {
+    String location = "DN";
+    Criteria criteria = Criteria.where("location").is(location);
+    Aggregation aggregation = newAggregation(
+            Aggregation.match(criteria),
+            Aggregation.group("lastName", "firstName").first("lastName").as("lastName")
+
+    );
+    AggregationResults<Etudiant> results = this.mongoTemplate.aggregate(aggregation, "etudiant", Etudiant.class);
+    List<String> lastNames = new ArrayList<>();
+    for (Etudiant employee : results.getMappedResults()) {
+        lastNames.add(employee.getLastName());
+    }
+    //
+}
+```
+- Criteria : This is a class in the package org.springframework.data.mongodb.core.query that provides many methods to execute queries like WHERE , IS , LT , GT
+
+```java
+Criteria criteria = Criteria.where("location").is(location);
+```
+- This statement is used to create a Criteria containing the condition that the locations in the database must be equal to the location from the input parameter.
+```java
+Aggregation aggregation = newAggregation(
+            Aggregation.match(criteria),
+            Aggregation.group("lastName").first("lastName").as("lastName")
+    );
+```
+- The above statement is used to create a Pipeline with the match(criteria) operator with the criteria defined above and group by lastName.
+```java
+AggregationResults<Etudiant> results = this.mongoTemplate.aggregate(aggregation, "etudiant", Etudiant.class);
+```
+- Use mongoTemplate to manipulate the database with the aggregation defined above, the collection name is Employees and return Employee.class
+
+###We can also use aggregation in many other cases.
+- Count the number of records returned.
+```java
+Criteria criteria = Criteria.where("location").is(location);
+AggregationOperation match = Aggregation.match(criteria);
+AggregationOperation group = Aggregation.group("location").count().as("total");
+```
+- Calculation based on the conditions, specifically in this case I am using to calculate the total salary of people over 23 years old and are in DN.
+```java
+Criteria criteria = Criteria.where("age").gte(23).and("location").is("DN");
+AggregationOperation match = Aggregation.match(criteria);
+AggregationOperation group = Aggregation.group("location").sum("salary").as("totalSalary").push("lastName").as("lastName");
+```
 
 Build
 -------
