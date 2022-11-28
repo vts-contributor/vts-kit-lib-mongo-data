@@ -1,0 +1,4 @@
+com\viettel\vtskit\mongo\configuration\MongoAutoConfiguration.class
+com\viettel\vtskit\mongo\configuration\CustomMongoProperties.class
+com\viettel\vtskit\mongo\MongoService.class
+META-INF\spring-configuration-metadata.json

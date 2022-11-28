@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Primary;
 public class MongoAutoConfiguration {
     @Bean
     @ConfigurationProperties(
-            prefix = "vstkit.mongodb"
+            prefix = "mongodb"
     )
     @Primary
     public MongoProperties properties(){
