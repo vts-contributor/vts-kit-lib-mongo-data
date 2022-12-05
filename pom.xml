@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.atviettelsolutions</groupId>
-    <artifactId>vts-kit-ms-mongo-data</artifactId>
+    <artifactId>vts-kit-lib-mongo-data</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -124,15 +124,7 @@
                     <excludes>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
+            </plugin>            
         </plugins>
     </build>
     
