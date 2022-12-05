@@ -19,7 +19,7 @@ Quick start
 ```xml
 <dependency>
     <groupId>com.atviettelsolutions</groupId>
-    <artifactId>vts-kit-ms-mongo-data</artifactId>
+    <artifactId>vts-kit-lib-mongo-data</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
