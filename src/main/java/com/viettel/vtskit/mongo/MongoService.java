@@ -25,9 +25,14 @@ public class MongoService {
     MongoTemplate mongoTemplate;
 
 
-    public void createCollection(String collectionName){
-        mongoTemplate.createCollection(collectionName);
-        return;
+    public String createCollection(String collectionName){
+        try{
+            mongoTemplate.createCollection(collectionName);
+            return collectionName;
+        }catch (Exception e){
+            return e.getMessage();
+        }
+
     }
     public void createCollection(Class entityClass){
         mongoTemplate.createCollection(entityClass);

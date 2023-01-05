@@ -6,7 +6,7 @@
 
     <groupId>com.atviettelsolutions</groupId>
     <artifactId>vts-kit-lib-mongo-data</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 
     <properties>
         <spring-boot.version>2.6.6</spring-boot.version>
