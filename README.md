@@ -42,37 +42,37 @@ MongoService mongoService;
 to use our function.
 ##### Create collection
 ```java
-mongoService.createCollection(Class entityClass);
+MongoCollection<Document> documentMongoCollection = mongoService.createCollection(Class entityClass);
 
-mongoService.createCollection(String CollectionName);
+MongoCollection<Document> documentMongoCollection = mongoService.createCollection(String CollectionName);
 ```
 ##### Insert data
 ```java
-mongoService.insertData(T objectToSave)
+<T> objectToSave = mongoService.insertData(T objectToSave)
 
-mongoService.insertData(T objectToSave, String collectionName)
+<T> objectToSave mongoService.insertData(T objectToSave, String collectionName)
 ```
 ##### Get by field
 ```java
-mongoService.getByField(String field,String searchField, Class<T> entityClass)
+List<T> listObject = mongoService.getByField(String field,String searchField, Class<T> entityClass)
 
-mongoService.getByField(String field,String searchField,  Class<T> entityClass,String collectionName)
+List<T> listObject = mongoService.getByField(String field,String searchField,  Class<T> entityClass,String collectionName)
 
-mongoService.getByFieldAndSort(String field,String searchField, Class<T> entityClass, String properties)
+List<T> listObject = mongoService.getByFieldAndSort(String field,String searchField, Class<T> entityClass, String properties)
 ```
 ##### Delete data
 ```java
-mongoService.deteleByField(String field, String deleteField, Class<T> entityClass)
+<T> objectDelete = mongoService.deteleByField(String field, String deleteField, Class<T> entityClass)
 
-mongoService.deteleByField(String field, String deleteField, Class<T> entityClass, String collectionName)
+<T> objectDelete = mongoService.deteleByField(String field, String deleteField, Class<T> entityClass, String collectionName)
 ```
 ##### Update data
 ```java
-mongoService.updateAllValue(String field, String value, String updateValue, Class entityClass)
+UpdateResult updateResult = mongoService.updateAllValue(String field, String value, String updateValue, Class entityClass)
 ```
 ##### Update and increase value
 ```java
-UpdateResult updateAndIncrease(String searchField, String searchKey, String increaseField, int increaseValue, Class entityClass)
+UpdateResult updateResult = mongoService.updateAndIncrease(String searchField, String searchKey, String increaseField, int increaseValue, Class entityClass)
 ```
 ##### Search fulltext
 ```java
@@ -82,26 +82,26 @@ List fullTextSearch(String searchPhrase, Class entityClass)
 ###### GeoNear
 You can use the near query to search for places within a given distance
 ```java
-List findGeoNear(Double lat, Double lng, Class entityClass)
+List<GeoResult<T>> geoResult = mongoService.findGeoNear(Double lat, Double lng, Class entityClass)
 ```
 ###### Within Query
 The geoWithin query enables us to search for places that fully exist within a given Geometry
 * geoWithinCenterSphere
 ```java
-FindIterable<Document> geoWithinCenterSphere(String entityClass, Double lat, Double lng, Double distanceInRad)
+FindIterable<Document> geoResult = mongoService.geoWithinCenterSphere(String entityClass, Double lat, Double lng, Double distanceInRad)
 ```
 * geoWithinBox
 ```java
-FindIterable<Document> geoWithinBox(String entityClass, Double lowerLeftX, Double lowerLeftY, Double upperRightX, Double upperRightY))
+FindIterable<Document> geoResult = mongoService.geoWithinBox(String entityClass, Double lowerLeftX, Double lowerLeftY, Double upperRightX, Double upperRightY))
 ```
 * geoWithinPolygon
 ```java
-FindIterable<Document> geoWithinPolygon(String entityClass, ArrayList<List<Double>> points)
+FindIterable<Document> geoResult = mongoService.geoWithinPolygon(String entityClass, ArrayList<List<Double>> points)
 ```
 ###### geoIntersects
 The geoIntersects query finds objects that at least intersect with a given Geometry
 ```java
-FindIterable<Document> geoIntersects(String entityClass, ArrayList<Position> positions)
+FindIterable<Document> geoResult = mongoService.geoIntersects(String entityClass, ArrayList<Position> positions)
 ```
 
 ## Aggregation introduce
@@ -171,17 +171,14 @@ Sample data `Etudiant.class`
   "salary": 22.2
 }
 ```
-Use group in handling query returned data.
-```sql
-db.etudiant.aggregate ([ { "$match" : { "location" : "DN"}} , { "$group" : { "_id" : "$lastName" , "lastName" : { "$first" : "$lastName"}}}])
-```
+
 ```java
 public void getAllLastNameInLocation() {
     String location = "DN";
     Criteria criteria = Criteria.where("location").is(location);
     Aggregation aggregation = newAggregation(
             Aggregation.match(criteria),
-            Aggregation.group("lastName", "firstName").first("lastName").as("lastName")
+            Aggregation.group("lastName").first("lastName").as("lastName")
 
     );
     AggregationResults<Etudiant> results = this.mongoTemplate.aggregate(aggregation, "etudiant", Etudiant.class);
@@ -192,6 +189,18 @@ public void getAllLastNameInLocation() {
     //
 }
 ```
+The above code is similar to the following aggregation.
+```sql
+db.etudiant.aggregate ([ { "$match" : { "location" : "DN"}} , { "$group" : { "_id" : "$lastName" , "lastName" : { "$first" : "$lastName"}}}])
+```
+The equivalent SQL query in MySQL for the given MongoDB aggregate function would be:
+```sql
+SELECT MIN(lastName) as lastName 
+FROM etudiant 
+WHERE location = 'DN' 
+GROUP BY lastName;
+```
+Here, the WHERE clause is equivalent to the $match stage in the MongoDB aggregate function, filtering the records based on the value of location. The GROUP BY clause is equivalent to the $group stage, grouping the records based on the value of lastName. The MIN function is used to return the first value of the lastName field for each group, which is equivalent to the $first operator in the MongoDB aggregate function.
 - Criteria : This is a class in the package org.springframework.data.mongodb.core.query that provides many methods to execute queries like WHERE , IS , LT , GT
 
 ```java
