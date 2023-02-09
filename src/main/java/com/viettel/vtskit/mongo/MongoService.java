@@ -1,11 +1,12 @@
 package com.viettel.vtskit.mongo;
 
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.geojson.Polygon;
 import com.mongodb.client.model.geojson.Position;
 import com.mongodb.client.result.UpdateResult;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,19 +20,31 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @EnableMongoRepositories
 public class MongoService {
     @Autowired
     MongoTemplate mongoTemplate;
 
 
-    public void createCollection(String collectionName){
-        mongoTemplate.createCollection(collectionName);
-        return;
+    public MongoCollection<Document> createCollection(String collectionName){
+        try{
+            MongoCollection<Document> documentMongoCollection = mongoTemplate.createCollection(collectionName);
+            return documentMongoCollection;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            return null;
+        }
+
     }
-    public void createCollection(Class entityClass){
-        mongoTemplate.createCollection(entityClass);
-        return;
+    public MongoCollection<Document> createCollection(Class entityClass){
+        try{
+            MongoCollection<Document> documentMongoCollection=mongoTemplate.createCollection(entityClass);
+            return documentMongoCollection;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            return null;
+        }
     }
 
     public <T> T insertData(T objectToSave, String collectionName){

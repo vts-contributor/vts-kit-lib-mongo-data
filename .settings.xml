@@ -11,4 +11,5 @@
         <password>${env.NEXUS_PASS}</password>
     </server>
 </servers>
+
 </settings>

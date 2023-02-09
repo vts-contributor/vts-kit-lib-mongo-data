@@ -6,11 +6,12 @@
 
     <groupId>com.atviettelsolutions</groupId>
     <artifactId>vts-kit-lib-mongo-data</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 
     <properties>
         <spring-boot.version>2.6.6</spring-boot.version>
         <spring.version>5.3.19</spring.version>
+        <lombok.version>1.16.22</lombok.version>
         <!--suppress UnresolvedMavenProperty -->
         <sonar.organization>${env.SONAR_ORGANIZATION}</sonar.organization>
     </properties>
@@ -67,6 +68,12 @@
             <artifactId>tomcat-embed-core</artifactId>
             <version>9.0.60</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
         <!-- End Spring Boot -->
 
         <!-- Unit Test -->
@@ -82,6 +89,7 @@
             <version>2.0.9</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
