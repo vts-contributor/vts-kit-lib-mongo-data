@@ -219,7 +219,7 @@ AggregationResults<Etudiant> results = this.mongoTemplate.aggregate(aggregation,
 ```
 - Use mongoTemplate to manipulate the database with the aggregation defined above, the collection name is Employees and return Employee.class
 
-###We can also use aggregation in many other cases.
+### We can also use aggregation in many other cases.
 - Count the number of records returned.
 ```java
 Criteria criteria = Criteria.where("location").is(location);
