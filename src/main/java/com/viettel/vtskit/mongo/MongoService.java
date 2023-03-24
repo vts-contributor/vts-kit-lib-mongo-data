@@ -54,30 +54,30 @@ public class MongoService {
         return mongoTemplate.save(objectToSave);
     }
 
-    public <T> List<T> getByField(String field,String searchField, Class<T> entityClass){
+    public <T> List<T> getByField(String field, Object searchField, Class<T> entityClass){
         Query query = new Query(Criteria.where(field).is(searchField));
         return mongoTemplate.find(query,entityClass);
     }
-    public <T> List<T> getByField(String field,String searchField,  Class<T> entityClass,String collectionName){
+    public <T> List<T> getByField(String field,Object searchField,  Class<T> entityClass,String collectionName){
         Query query = new Query(Criteria.where(field).is(searchField));
         return mongoTemplate.find(query,entityClass,collectionName);
     }
-    public <T> List<T> getByFieldAndSort(String field,String searchField, Class<T> entityClass, String properties){
+    public <T> List<T> getByFieldAndSort(String field,Object searchField, Class<T> entityClass, String properties){
         Query query = new Query(Criteria.where(field).is(searchField));
         query.with(Sort.by(Sort.Direction.DESC, properties));
         return mongoTemplate.find(query,entityClass);
     }
 
-    public <T> T deteleByField(String field, String deleteField, Class<T> entityClass, String collectionName){
+    public <T> T deteleByField(String field, Object deleteField, Class<T> entityClass, String collectionName){
         Query query = new Query(Criteria.where(field).is(deleteField));
         return mongoTemplate.findAndRemove(query,entityClass,collectionName);
     }
-    public <T> T deteleByField(String field, String deleteField, Class<T> entityClass){
+    public <T> T deteleByField(String field, Object deleteField, Class<T> entityClass){
         Query query = new Query(Criteria.where(field).is(deleteField));
         return mongoTemplate.findAndRemove(query,entityClass);
     }
 
-    public UpdateResult updateAllValue(String field, String value, String updateValue, Class entityClass){
+    public UpdateResult updateAllValue(String field, Object value, String updateValue, Class entityClass){
         Query query = new Query(Criteria.where(field).is(value));
         Update update = new Update().set(field,updateValue);
         return mongoTemplate.updateMulti(query,update,entityClass);

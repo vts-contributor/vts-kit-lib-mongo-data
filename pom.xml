@@ -6,7 +6,7 @@
 
     <groupId>com.atviettelsolutions</groupId>
     <artifactId>vts-kit-lib-mongo-data</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.0</version>
 
     <properties>
         <spring-boot.version>2.6.6</spring-boot.version>
@@ -103,6 +103,18 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>com.atviettelsolutions</groupId>
+                    <artifactId>vts-plugin</artifactId>
+                    <version>0.0.1</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>read-pom</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
