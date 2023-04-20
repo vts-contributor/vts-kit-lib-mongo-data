@@ -1,6 +1,6 @@
 # vts-kit-lib-mongo-data
 -------
-This library provides utilities that make it easy to integrate Mongo data into spring boot project
+This library provides utilities that make it easy to integrate Mongo data into spring boot project.
 
 Feature List:
 * [Create Collection](#Create-collection)
